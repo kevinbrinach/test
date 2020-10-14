@@ -1,5 +1,6 @@
 export default function() {
   return {
-    bearerToken: null
+    bearerToken: null,
+    errorGettingToken: null
   };
 }

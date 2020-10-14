@@ -1,11 +1,12 @@
 <template>
   <q-card>
-    <q-img
-      class="image"
-      v-if="imageDetails"
-      alt="QZoom with scale"
-      :src="imageDetails.full_picture"
-    />
+    <transition name="fade-transition" v-if="imageDetails">
+      <q-img
+        class="image"
+        alt="QZoom with scale"
+        :src="imageDetails.full_picture"
+      />
+    </transition>
 
     <Spinner v-else />
     <q-btn color="red" dense size="lg" class="button" flat v-close-popup
@@ -27,20 +28,21 @@
       @click="nextImage"
       :disable="currentIndex + 1 === arrayLength"
     />
-    <q-card-section
-      class="description text-red-8"
-      :class="$q.screen.gt.sm ? 'text-h6' : 'text-body'"
-      v-if="imageDetails"
-    >
-      <div>Author: {{ imageDetails.author }}</div>
-      <div>
-        Camera:
-        {{ imageDetails.camera }}
-      </div>
-      <div class="row col-12 justify-center">
-        Hashtags: {{ imageDetails.tags }}
-      </div>
-    </q-card-section>
+    <transition name="fade-transition" v-if="imageDetails">
+      <q-card-section
+        class="description text-red-8"
+        :class="$q.screen.gt.sm ? 'text-h6' : 'text-body'"
+      >
+        <div>Author: {{ imageDetails.author }}</div>
+        <div>
+          Camera:
+          {{ imageDetails.camera }}
+        </div>
+        <div class="row col-12 justify-center">
+          Hashtags: {{ imageDetails.tags }}
+        </div>
+      </q-card-section>
+    </transition>
     <q-btn
       unelevated
       icon="fas fa-share-alt"
@@ -55,21 +57,33 @@
         </div>
       </q-card>
     </q-dialog>
+    <error-snackbar
+      v-if="errorGettingImage"
+      :msg="'There was an error retrieving this image. Please try with another one'"
+    />
   </q-card>
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from "vuex";
+import ErrorSnackbar from "./ErrorSnackbar.vue";
 import Spinner from "./Spinner";
 
-import { mapGetters, mapState, mapActions } from "vuex";
 export default {
   name: "Popup",
   props: {
-    imageId: String,
-    index: Number,
+    imageId: {
+      type: String,
+      required: true,
+    },
+    index: {
+      type: Number,
+      default: 0,
+    },
   },
   components: {
     Spinner,
+    ErrorSnackbar,
   },
   data() {
     return {
@@ -80,7 +94,12 @@ export default {
   },
   computed: {
     ...mapGetters("images", ["imagesList"]),
-    ...mapState("images", ["arrayLength", "imageDetails", "imageLoaded"]),
+    ...mapState("images", [
+      "arrayLength",
+      "imageDetails",
+      "imageLoaded",
+      "errorGettingImage",
+    ]),
   },
   methods: {
     ...mapActions("images", ["GetImage"]),
@@ -142,6 +161,14 @@ export default {
   position: fixed;
   bottom: 40px;
   right: 50px;
-  color: rgb(0, 255, 64);
+  color: rgba(5, 180, 49, 0.719);
+}
+.fade-transition-enter-active,
+.fade-transition-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-transition-enter,
+.fade-transition-leave-to {
+  opacity: 0;
 }
 </style>

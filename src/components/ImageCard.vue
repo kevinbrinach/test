@@ -8,16 +8,24 @@
 </template>
 
 <script>
+import ErrorSnackbar from "./ErrorSnackbar.vue";
 import Popup from "./Popup.vue";
 
 export default {
   name: "ImageCard",
   components: {
     Popup,
+    ErrorSnackbar,
   },
   props: {
-    image: Object,
-    index: Number,
+    image: {
+      type: Object,
+      required: true,
+    },
+    index: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {

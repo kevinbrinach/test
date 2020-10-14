@@ -17,3 +17,11 @@ export function SET_IMAGE(state, image) {
 export function IMAGE_LOADED(state, payload) {
   state.imageLoaded = payload;
 }
+
+export function ERROR_GETTING_IMAGES_LIST(state, payload) {
+  state.errorGettingImagesList = payload;
+}
+
+export function ERROR_GETTING_IMAGE(state, payload) {
+  state.errorGettingImage = payload;
+}

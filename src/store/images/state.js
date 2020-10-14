@@ -4,6 +4,8 @@ export default function() {
     maxPages: null,
     arrayLength: null,
     imageDetails: null,
-    imageLoaded: null
+    imageLoaded: null,
+    errorGettingImagesList: null,
+    errorGettingImage: null
   };
 }
