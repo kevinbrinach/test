@@ -1,3 +1,5 @@
+//Axios is only available in SFC files through this.$axios, when it comes to actions/mutations or other not *.vue files axios must be imported.
+//https://quasar.dev/quasar-cli/ajax-requests#Introduction
 import axios from "axios";
 
 export function GetImages({ commit }, { page }) {
